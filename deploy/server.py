@@ -6,6 +6,8 @@
 import cv2
 import face_model
 
+model_path = ''
+
 
 class Config:
     """模型配置参数"""
@@ -23,7 +25,9 @@ def get_model():
     # TODO 如果放到全局变量，则会导致错误
     # mxnet.base.MXNetError: [11:56:09] src/storage/storage.cc:147: Unimplemented device 0
     # https://github.com/deepinsight/insightface/issues/415
-    return face_model.FaceModel(Config())
+    config = Config()
+    config.model = '/models/%s/model,0' % model_path
+    return face_model.FaceModel(config)
 
 
 def detect(path):
@@ -38,6 +42,8 @@ def detect(path):
 
 
 if __name__ == '__main__':
+    import sys
     from fireRest import API, app
+    model_path = sys.argv[1]
     API(detect)
     app.run(port=20920, host='0.0.0.0')
