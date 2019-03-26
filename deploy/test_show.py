@@ -28,6 +28,8 @@ def detect(path):
         cv2.rectangle(image, (x, y), (xb, yb), (0, 0, 255), thickness=1)
         cv2.putText(image, "%.3f" % score, (x+5, y-5),
                     cv2.FONT_HERSHEY_SIMPLEX, 1.0, (128, 255, 0), 1)
+        for x, y in points:
+            cv2.circle(image, (x, y), 1, (0, 0, 255), -1)
 
     cv2.imshow("image", image)
     cv2.waitKey(0)
