@@ -73,6 +73,9 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
 
     tform = trans.SimilarityTransform()
     print('[debug]', dst.shape, src.shape)
+    # shape: (10,) (5, 2)
+    # 报错：IndexError: tuple index out of range
+    dst = dst.reshape(-1, 2)
     tform.estimate(dst, src)
     M = tform.params[0:2,:]
     #M = cv2.estimateRigidTransform( dst.reshape(1,5,2), src.reshape(1,5,2), False)
