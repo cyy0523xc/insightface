@@ -3,6 +3,7 @@
 # 启动http服务
 # Author: alex
 # Created Time: 2019年03月26日 星期二 17时40分55秒
+import cv2
 import face_model
 
 
@@ -21,7 +22,8 @@ model = face_model.FaceModel(Config())
 
 
 def detect(path):
-    bboxes, points = model.detect(path)
+    image = cv2.imread(path)
+    bboxes, points = model.detect(image)
     return {
         'bboxes': bboxes,
         'points': points
