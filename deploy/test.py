@@ -29,7 +29,7 @@ print('image shape: ', img.shape, " person count: ", len(bboxes))
 
 features = []
 for index, bbox, point in zip(range(len(bboxes)), bboxes, points):
-    print('Person: %d' % index, '*'*20)
+    print('Person: %d' % index, '*'*40)
     print('bbox: ', bbox)
     point = point.reshape((2, 5)).T
     print('points: ', point)
@@ -42,10 +42,11 @@ for index, bbox, point in zip(range(len(bboxes)), bboxes, points):
     print('gender: ', gender)
     print('age: ', age)
 
+print('*'*60)
 img = cv2.imread(args.image_cmp_file)
 img = model.get_one_aligned(img)
 f2 = model.get_feature(img)
 dists = [np.sum(np.square(f1-f2)) for f1 in features]
-print(dists)
+print(min(dists), dists)
 simes = [np.dot(f1, f2.T) for f1 in features]
 print(simes)

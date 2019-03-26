@@ -86,6 +86,7 @@ class FaceModel:
         bbox, points = ret
         if bbox.shape[0] == 0:
             return None
+        print('person count: ', len(bbox))
         bbox = bbox[0, 0:4]
         points = points[0, :].reshape((2, 5)).T
         nimg = face_preprocess.preprocess(face_img, bbox, points,
