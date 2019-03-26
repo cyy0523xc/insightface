@@ -10,6 +10,7 @@ class Config:
     """模型配置参数"""
     model = '/models/gamodel-r50/model,0'
     ga_model = '/models/gamodel-r50/model,0'
+    image_size = "112,112"
     gpu = 0    # gpu id
     det = 0    # mtcnn option, 1 means using R+O, 0 means detect from begining
     flip = 0   # whether do lr flip aug
