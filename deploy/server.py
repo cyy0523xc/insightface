@@ -13,7 +13,8 @@ epoch = 0
 class Config:
     """模型配置参数"""
     model = '/models/model-r100-ii/model,0'
-    ga_model = '/models/gamodel-r50/model,0'
+    # ga_model = '/models/gamodel-r50/model,0'
+    ga_model = ''
     image_size = "112,112"
     gpu = 0    # gpu id
     det = 0    # mtcnn option, 1 means using R+O, 0 means detect from begining
@@ -46,6 +47,5 @@ if __name__ == '__main__':
     import sys
     from fireRest import API, app
     model_path = sys.argv[1]
-    epoch = int(sys.argv[2])
     API(detect)
     app.run(port=20920, host='0.0.0.0')
