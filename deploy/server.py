@@ -16,7 +16,7 @@ class Config:
     det = 0    # mtcnn option, 1 means using R+O, 0 means detect from begining
     flip = 0   # whether do lr flip aug
     threshold = 1.24   # ver dist threshold
-    num_worker = 4     # 检测模型
+    num_worker = 2     #
 
 
 def get_model():
