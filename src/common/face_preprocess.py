@@ -69,6 +69,7 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     dst = landmark.astype(np.float32)
 
     tform = trans.SimilarityTransform()
+    print(dst, src)
     tform.estimate(dst, src)
     M = tform.params[0:2,:]
     #M = cv2.estimateRigidTransform( dst.reshape(1,5,2), src.reshape(1,5,2), False)
@@ -91,7 +92,7 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     ret = img[bb[1]:bb[3],bb[0]:bb[2],:]
     if len(image_size)>0:
       ret = cv2.resize(ret, (image_size[1], image_size[0]))
-    return ret 
+    return ret
   else: #do align using landmark
     assert len(image_size)==2
 
