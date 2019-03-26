@@ -18,11 +18,9 @@ class Config:
     threshold = 1.24   # ver dist threshold
 
 
-model = face_model.FaceModel(Config())
-
-
 def detect(path):
     image = cv2.imread(path)
+    model = face_model.FaceModel(Config())
     bboxes, points = model.detect(image)
     print('shape: ', bboxes.shape, points.shape)
     return {
