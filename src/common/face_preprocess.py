@@ -14,13 +14,13 @@ def parse_lst_line(line):
   #print(vec)
   if len(vec)>3:
     bbox = np.zeros( (4,), dtype=np.int32)
-    for i in xrange(3,7):
+    for i in range(3,7):
       bbox[i-3] = int(vec[i])
 
     landmark = None
     if len(vec)>7:
       _l = []
-      for i in xrange(7,17):
+      for i in range(7,17):
         _l.append(float(vec[i]))
 
       landmark = np.array(_l).reshape( (2,5) ).T
@@ -72,9 +72,6 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     dst = landmark.astype(np.float32)
 
     tform = trans.SimilarityTransform()
-    # print('[debug]', dst.shape, src.shape)   # (10,) (5, 2)
-    # 报错：IndexError: tuple index out of range
-    # dst = dst.reshape(-1, 2)
     tform.estimate(dst, src)
     M = tform.params[0:2,:]
     #M = cv2.estimateRigidTransform( dst.reshape(1,5,2), src.reshape(1,5,2), False)
@@ -115,5 +112,3 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     #tform3.estimate(src, dst)
     #warped = trans.warp(img, tform3, output_shape=_shape)
     return warped
-
-

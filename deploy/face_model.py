@@ -72,14 +72,14 @@ class FaceModel:
         bboxes, points = ret
         return bboxes, points
 
-    def aligne(self, face_img, bbox, points):
+    def get_aligned(self, face_img, bbox, points):
         nimg = face_preprocess.preprocess(face_img, bbox, points,
                                           image_size='112,112')
         nimg = cv2.cvtColor(nimg, cv2.COLOR_BGR2RGB)
         aligned = np.transpose(nimg, (2, 0, 1))
         return aligned
 
-    def get_input(self, face_img):
+    def get_one_aligned(self, face_img):
         ret = self.detector.detect_face(face_img, det_type=self.args.det)
         if ret is None:
             return None
@@ -92,7 +92,7 @@ class FaceModel:
                                           image_size='112,112')
         nimg = cv2.cvtColor(nimg, cv2.COLOR_BGR2RGB)
         aligned = np.transpose(nimg, (2, 0, 1))
-        return aligned, bbox, points
+        return aligned
 
     def get_feature(self, aligned):
         input_blob = np.expand_dims(aligned, axis=0)

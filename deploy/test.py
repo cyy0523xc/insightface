@@ -12,6 +12,7 @@ python test.py --model ../models/gamodel-r50/model,0 \
 parser = argparse.ArgumentParser(description='face model test')
 # general
 parser.add_argument('--image-file', default='', help='path to image file.')
+parser.add_argument('--image-cmp-file', default='', help='path to image file.')
 parser.add_argument('--image-size', default='112,112', help='')
 parser.add_argument('--model', default='', help='path to load model.')
 parser.add_argument('--ga-model', default='', help='path to load model.')
@@ -26,25 +27,25 @@ img = cv2.imread(args.image_file)
 bboxes, points = model.detect(img)
 print('image shape: ', img.shape, " person count: ", len(bboxes))
 
+features = []
 for index, bbox, point in zip(range(len(bboxes)), bboxes, points):
     print('Person: %d' % index, '*'*20)
     print('bbox: ', bbox)
     point = point.reshape((2, 5)).T
     print('points: ', point)
-    aligned = model.aligne(img, bbox, point)
+    aligned = model.get_aligned(img, bbox, point)
     print('aligned image shape: ', aligned.shape)
     f1 = model.get_feature(aligned)
+    features.append(f1)
     print("feature: ", f1[0:10])
     gender, age = model.get_ga(aligned)
     print('gender: ', gender)
     print('age: ', age)
 
-sys.exit(0)
-img = cv2.imread('/raid5data/dplearn/megaface/facescrubr/112x112/Tom_Hanks/Tom_Hanks_54733.png')
+img = cv2.imread(args.image_cmp_file)
+img = model.get_one_aligned(img)
 f2 = model.get_feature(img)
-dist = np.sum(np.square(f1-f2))
-print(dist)
-sim = np.dot(f1, f2.T)
-print(sim)
-#diff = np.subtract(source_feature, target_feature)
-#dist = np.sum(np.square(diff),1)
+dists = [np.sum(np.square(f1-f2)) for f1 in features]
+print(dists)
+simes = [np.dot(f1, f2.T) for f1 in features]
+print(simes)
