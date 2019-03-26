@@ -25,8 +25,8 @@ def detect(path):
     image = cv2.imread(path)
     bboxes, points = model.detect(image)
     return {
-        'bboxes': bboxes,
-        'points': points
+        'bboxes': bboxes.tolist(),
+        'points': points.tolist(),
     }
 
 
