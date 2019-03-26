@@ -6,7 +6,8 @@ import numpy as np
 
 """
 python test.py --model ../models/gamodel-r50/model,0 \
-    --ga-model ../models/gamodel-r50/model,0
+    --ga-model ../models/gamodel-r50/model,0 \
+    --image-file ../tests/lldq01.jpeg
 """
 parser = argparse.ArgumentParser(description='face model test')
 # general
@@ -26,7 +27,8 @@ print('image shape: ', img.shape)
 bboxes, points = model.detect(img)
 print('image shape: ', img.shape)
 
-for bbox, point in zip(bboxes, points):
+for index, bbox, point in zip(range(bboxes), bboxes, points):
+    print('Person: %d' % index)
     print('bbox: ', bbox)
     print('points: ', point)
     aligned = model.aligne(img, bbox, point)
