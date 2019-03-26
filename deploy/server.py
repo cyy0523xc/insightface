@@ -9,7 +9,7 @@ import face_model
 
 class Config:
     """模型配置参数"""
-    model = '/models/gamodel-r50/model,0'
+    model = '/models/model-r100-ii/model,0'
     ga_model = '/models/gamodel-r50/model,0'
     image_size = "112,112"
     gpu = 0    # gpu id
