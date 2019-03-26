@@ -72,7 +72,7 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     dst = landmark.astype(np.float32)
 
     tform = trans.SimilarityTransform()
-    print(type(dst), type(src))
+    print('[debug]', dst.shape, src.shape)
     tform.estimate(dst, src)
     M = tform.params[0:2,:]
     #M = cv2.estimateRigidTransform( dst.reshape(1,5,2), src.reshape(1,5,2), False)
