@@ -72,8 +72,7 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     dst = landmark.astype(np.float32)
 
     tform = trans.SimilarityTransform()
-    print('[debug]', dst.shape, src.shape)
-    # shape: (10,) (5, 2)
+    # print('[debug]', dst.shape, src.shape)   # (10,) (5, 2)
     # 报错：IndexError: tuple index out of range
     dst = dst.reshape(-1, 2)
     tform.estimate(dst, src)
