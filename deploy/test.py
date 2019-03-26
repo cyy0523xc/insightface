@@ -5,9 +5,10 @@ import sys
 import numpy as np
 
 """
-python test.py --model ../models/gamodel-r50/model,0 \
-    --ga-model ../models/gamodel-r50/model,0 \
-    --image-file ../tests/lldq01.jpeg
+python test.py --model /models/gamodel-r50/model,0 \
+    --ga-model /models/gamodel-r50/model,0 \
+    --image-file ../tests/lldq01.jpeg \
+    --image-cmp-file ../tests/Tom_Hanks_54745.png
 """
 parser = argparse.ArgumentParser(description='face model test')
 # general
