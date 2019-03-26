@@ -31,4 +31,4 @@ def detect(path):
 if __name__ == '__main__':
     from fireRest import API, app
     API(detect)
-    app.run(port=20920)
+    app.run(port=20920, host='0.0.0.0')
