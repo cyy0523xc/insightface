@@ -22,7 +22,10 @@ model = face_model.FaceModel(Config())
 
 def detect(path):
     bboxes, points = model.detect(path)
-    return bboxes, points
+    return {
+        'bboxes': bboxes,
+        'points': points
+    }
 
 
 if __name__ == '__main__':
