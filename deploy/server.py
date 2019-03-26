@@ -7,6 +7,7 @@ import cv2
 import face_model
 
 model_path = ''
+epoch = 0
 
 
 class Config:
@@ -26,7 +27,7 @@ def get_model():
     # mxnet.base.MXNetError: [11:56:09] src/storage/storage.cc:147: Unimplemented device 0
     # https://github.com/deepinsight/insightface/issues/415
     config = Config()
-    config.model = '/models/%s/model,0' % model_path
+    config.model = '/models/%s/model,%d' % (model_path, epoch)
     return face_model.FaceModel(config)
 
 
@@ -45,5 +46,6 @@ if __name__ == '__main__':
     import sys
     from fireRest import API, app
     model_path = sys.argv[1]
+    epoch = int(sys.argv[2])
     API(detect)
     app.run(port=20920, host='0.0.0.0')
