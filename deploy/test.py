@@ -29,6 +29,7 @@ print('image shape: ', img.shape, " person count: ", len(bboxes))
 for index, bbox, point in zip(range(len(bboxes)), bboxes, points):
     print('Person: %d' % index, '*'*20)
     print('bbox: ', bbox)
+    point = point.reshape((2, 5)).T
     print('points: ', point)
     aligned = model.aligne(img, bbox, point)
     print('aligned image shape: ', aligned.shape)
