@@ -26,7 +26,7 @@ def detect(path):
     bboxes, points = model.detect(image)
     return {
         'bboxes': bboxes.tolist(),
-        'points': points.reshape((2, 5)).T.tolist(),
+        'points': points.reshape((2, -1)).T.tolist(),
     }
 
 
