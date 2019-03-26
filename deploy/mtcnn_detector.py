@@ -55,11 +55,10 @@ class MtcnnDetector(object):
 
         self.PNets = []
         for i in range(num_worker):
-            workner_net = mx.model.FeedForward.load(models[0], 1, ctx=ctx)
+            workner_net = mx.model.FeedForward.load(models[i], 1, ctx=ctx)
             self.PNets.append(workner_net)
 
         #self.Pool = Pool(num_worker)
-
         self.RNet = mx.model.FeedForward.load(models[1], 1, ctx=ctx)
         self.ONet = mx.model.FeedForward.load(models[2], 1, ctx=ctx)
         self.LNet = mx.model.FeedForward.load(models[3], 1, ctx=ctx)

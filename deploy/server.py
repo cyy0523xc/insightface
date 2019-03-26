@@ -16,11 +16,19 @@ class Config:
     det = 0    # mtcnn option, 1 means using R+O, 0 means detect from begining
     flip = 0   # whether do lr flip aug
     threshold = 1.24   # ver dist threshold
+    num_worker = 4     # 检测模型
+
+
+def get_model():
+    # TODO 如果放到全局变量，则会导致错误
+    # mxnet.base.MXNetError: [11:56:09] src/storage/storage.cc:147: Unimplemented device 0
+    # https://github.com/deepinsight/insightface/issues/415
+    return face_model.FaceModel(Config())
 
 
 def detect(path):
     image = cv2.imread(path)
-    model = face_model.FaceModel(Config())
+    model = get_model()
     bboxes, points = model.detect(image)
     print('shape: ', bboxes.shape, points.shape)
     return {

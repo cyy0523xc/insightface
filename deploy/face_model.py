@@ -56,11 +56,13 @@ class FaceModel:
         mtcnn_path = os.path.join(os.path.dirname(__file__), 'mtcnn-model')
         if args.det == 0:
             detector = MtcnnDetector(model_folder=mtcnn_path, ctx=ctx,
-                                     num_worker=1, accurate_landmark=True,
+                                     num_worker=args.num_worker,
+                                     accurate_landmark=True,
                                      threshold=self.det_threshold)
         else:
             detector = MtcnnDetector(model_folder=mtcnn_path, ctx=ctx,
-                                     num_worker=1, accurate_landmark=True,
+                                     num_worker=args.num_worker,
+                                     accurate_landmark=True,
                                      threshold=[0.0, 0.0, 0.2])
 
         self.detector = detector
