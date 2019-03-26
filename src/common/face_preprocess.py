@@ -16,11 +16,13 @@ def parse_lst_line(line):
     bbox = np.zeros( (4,), dtype=np.int32)
     for i in xrange(3,7):
       bbox[i-3] = int(vec[i])
+
     landmark = None
     if len(vec)>7:
       _l = []
       for i in xrange(7,17):
         _l.append(float(vec[i]))
+
       landmark = np.array(_l).reshape( (2,5) ).T
   #print(aligned)
   return image_path, label, bbox, landmark, aligned
@@ -46,6 +48,7 @@ def read_image(img_path, **kwargs):
 def preprocess(img, bbox=None, landmark=None, **kwargs):
   if isinstance(img, str):
     img = read_image(img, **kwargs)
+
   M = None
   image_size = []
   str_image_size = kwargs.get('image_size', '')
@@ -69,7 +72,7 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     dst = landmark.astype(np.float32)
 
     tform = trans.SimilarityTransform()
-    print(dst, src)
+    print(type(dst), type(src))
     tform.estimate(dst, src)
     M = tform.params[0:2,:]
     #M = cv2.estimateRigidTransform( dst.reshape(1,5,2), src.reshape(1,5,2), False)
