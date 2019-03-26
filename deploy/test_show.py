@@ -23,7 +23,7 @@ def detect(path):
 
     res = res['data']
     image = cv2.imread(path)
-    for x, y, xb, yb, score in res['bboxes']:
+    for (x, y, xb, yb, score), points in zip(res['bboxes'], res['points']):
         x, y, xb, yb = int(x), int(y), int(xb), int(yb)
         cv2.rectangle(image, (x, y), (xb, yb), (0, 0, 255), thickness=1)
         cv2.putText(image, "%.3f" % score, (x+5, y-5),
