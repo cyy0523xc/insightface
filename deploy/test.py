@@ -24,7 +24,7 @@ args = parser.parse_args()
 model = face_model.FaceModel(args)
 img = cv2.imread(args.image_file)
 bboxes, points = model.detect(img)
-print('image shape: ', img.shape, " person count：", len(bboxes))
+print('image shape: ', img.shape, " person count: ", len(bboxes))
 
 for index, bbox, point in zip(range(len(bboxes)), bboxes, points):
     print('Person: %d' % index)
