@@ -10,6 +10,7 @@ python test.py --model ../models/gamodel-r50/model,0 \
 """
 parser = argparse.ArgumentParser(description='face model test')
 # general
+parser.add_argument('--image-file', default='', help='path to image file.')
 parser.add_argument('--image-size', default='112,112', help='')
 parser.add_argument('--model', default='', help='path to load model.')
 parser.add_argument('--ga-model', default='', help='path to load model.')
@@ -20,10 +21,12 @@ parser.add_argument('--threshold', default=1.24, type=float, help='ver dist thre
 args = parser.parse_args()
 
 model = face_model.FaceModel(args)
-img = cv2.imread('Tom_Hanks_54745.png')
+img = cv2.imread(args.image_file)
 print('image shape: ', img.shape)
-img = model.get_input(img)
+img, bbox, points = model.get_input(img)
 print('image shape: ', img.shape)
+print('bbox: ', bbox)
+print('points: ', points)
 f1 = model.get_feature(img)
 print("feature: ", f1[0:10])
 gender, age = model.get_ga(img)
