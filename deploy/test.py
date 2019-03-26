@@ -27,7 +27,7 @@ print('image shape: ', img.shape)
 bboxes, points = model.detect(img)
 print('image shape: ', img.shape)
 
-for index, bbox, point in zip(range(bboxes), bboxes, points):
+for index, bbox, point in zip(range(len(bboxes)), bboxes, points):
     print('Person: %d' % index)
     print('bbox: ', bbox)
     print('points: ', point)
