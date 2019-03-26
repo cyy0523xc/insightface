@@ -24,6 +24,7 @@ model = face_model.FaceModel(Config())
 def detect(path):
     image = cv2.imread(path)
     bboxes, points = model.detect(image)
+    print('shape: ', bboxes.shape, points.shape)
     return {
         'bboxes': bboxes.tolist(),
         'points': points.reshape((2, -1)).T.tolist(),
