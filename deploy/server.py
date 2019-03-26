@@ -27,7 +27,7 @@ def detect(path):
     print('shape: ', bboxes.shape, points.shape)
     return {
         'bboxes': bboxes.tolist(),
-        'points': points.tolist(),
+        'points': [p.reshape((2, -1)).T.tolist() for p in points],
     }
 
 
