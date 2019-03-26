@@ -27,7 +27,7 @@ bboxes, points = model.detect(img)
 print('image shape: ', img.shape, " person count: ", len(bboxes))
 
 for index, bbox, point in zip(range(len(bboxes)), bboxes, points):
-    print('Person: %d' % index)
+    print('Person: %d' % index, '*'*20)
     print('bbox: ', bbox)
     print('points: ', point)
     aligned = model.aligne(img, bbox, point)
