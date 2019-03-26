@@ -66,6 +66,7 @@ class FaceModel:
     if ret is None:
       return None
     bbox, points = ret
+    print(bbox)
     if bbox.shape[0]==0:
       return None
     bbox = bbox[0,0:4]
