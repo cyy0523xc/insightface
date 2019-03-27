@@ -15,11 +15,12 @@ import face_preprocess
 
 
 def do_flip(data):
-  for idx in xrange(data.shape[0]):
+  for idx in range(data.shape[0]):
     data[idx,:,:] = np.fliplr(data[idx,:,:])
 
 
 class FaceModel:
+
   def __init__(self, args):
     self.args = args
     model = edict()
@@ -85,4 +86,3 @@ class FaceModel:
         embedding += _embedding
     embedding = sklearn.preprocessing.normalize(embedding).flatten()
     return embedding
-

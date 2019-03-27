@@ -106,6 +106,12 @@ class FaceModel:
         embedding = preprocessing.normalize(embedding).flatten()
         return embedding
 
+    def get_feature_by_image(self, image):
+        aligned = self.get_one_aligned(image)
+        if aligned:
+            return self.get_feature(aligned)
+        return None
+
     def get_ga(self, aligned):
         input_blob = np.expand_dims(aligned, axis=0)
         data = mx.nd.array(input_blob)
