@@ -36,7 +36,10 @@ class face:
         }
         res = requests.post(url, json=body).json()
         for data in res['data']:
-            show_image(data['path'], data['bboxes'], data['points'])
+            if data['bboxes']:
+                show_image(data['path'], data['bboxes'], data['points'])
+            else:
+                print('%s has no face!' % data['path'])
 
 
 def show_image(path, bboxes, pointses):

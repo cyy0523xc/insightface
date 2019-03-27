@@ -70,7 +70,7 @@ class FaceModel:
     def detect(self, face_img):
         ret = self.detector.detect_face(face_img, det_type=self.args.det)
         if ret is None:
-            return [], []
+            return None, None
         bboxes, points = ret
         return bboxes, points
 
