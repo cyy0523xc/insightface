@@ -101,11 +101,13 @@ def detect_dir(path_dir):
     for path in image_files:
         image = cv2.imread(path)
         bboxes, points = model.detect(image)
-        print('shape: ', bboxes.shape, points.shape)
+        if bboxes is not None:
+            bboxes = bboxes.tolist()
+            points = [p.reshape((2, -1)).T.tolist() for p in points]
         data.append({
             'path': path,
-            'bboxes': bboxes.tolist(),
-            'points': [p.reshape((2, -1)).T.tolist() for p in points],
+            'bboxes': bboxes,
+            'points': points,
         })
 
     return data
