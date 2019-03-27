@@ -122,9 +122,11 @@ def cluster(path_dir, k):
     for path in sorted(list(image_files)):
         image = cv2.imread(path)
         bboxes, pointses = model.detect(image)
+        pointses = pointses.reshape((2, 5)).T
         if bboxes is None:
             continue
 
+        print(type(bboxes), bboxes)
         aligneds = [model.get_aligned(image, bbox, points)
                     for bbox, points in zip(bboxes, pointses)
                     if abs(1-bbox[4]) < 0.0005]
