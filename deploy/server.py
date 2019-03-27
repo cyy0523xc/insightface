@@ -100,4 +100,4 @@ if __name__ == '__main__':
     API(detect)
     API(compare)
     API(compare_one2dir)
-    app.run(port=20920, host='0.0.0.0')
+    app.run(port=20920, host='0.0.0.0', debug=True)

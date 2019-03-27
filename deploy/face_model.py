@@ -108,9 +108,9 @@ class FaceModel:
 
     def get_feature_by_image(self, image):
         aligned = self.get_one_aligned(image)
-        if aligned:
-            return self.get_feature(aligned)
-        return None
+        if aligned is None:
+            return None
+        return self.get_feature(aligned)
 
     def get_ga(self, aligned):
         input_blob = np.expand_dims(aligned, axis=0)
