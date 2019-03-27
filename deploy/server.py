@@ -116,6 +116,7 @@ if __name__ == '__main__':
     from fireRest import API, app
     model_path = sys.argv[1]
     API(detect)
+    API(detect_dir)
     API(compare)
     API(compare_one2dir)
     app.run(port=20920, host='0.0.0.0', debug=True)

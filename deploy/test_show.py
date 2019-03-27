@@ -9,30 +9,34 @@ import requests
 host = '192.168.80.241:20920'
 
 
-def detect(path):
-    """
-    Args:
-        path: 图像路径
-    """
-    url = "http://%s/detect" % host
-    body = {
-        'path': path
-    }
-    res = requests.post(url, json=body).json()
-    print(res)
+class face:
+    def detect(self, path):
+        """
+        Args:
+            path: 图像路径
+        """
+        url = "http://%s/detect" % host
+        body = {
+            'path': path
+        }
+        res = requests.post(url, json=body).json()
+        print(res)
 
-    res = res['data']
-    show_image(path, res['bboxes'], res['points'])
+        res = res['data']
+        show_image(path, res['bboxes'], res['points'])
 
-
-def detect_dir(path_dir):
-    url = "http://%s/detect_dir" % host
-    body = {
-        'path_dir': path_dir
-    }
-    res = requests.post(url, json=body).json()
-    for data in res['data']:
-        show_image(data['path'], data['bboxes'], data['points'])
+    def detect_dir(self, path_dir):
+        """
+        Args:
+            path_dir: 图像路径文件夹
+        """
+        url = "http://%s/detect_dir" % host
+        body = {
+            'path_dir': path_dir
+        }
+        res = requests.post(url, json=body).json()
+        for data in res['data']:
+            show_image(data['path'], data['bboxes'], data['points'])
 
 
 def show_image(path, bboxes, pointses):
@@ -51,4 +55,4 @@ def show_image(path, bboxes, pointses):
 
 if __name__ == '__main__':
     import fire
-    fire.Fire(detect)
+    fire.Fire(face)
