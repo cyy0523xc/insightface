@@ -74,8 +74,8 @@ def compare_one2dir(path_file, path_dir):
     for path in image_files:
         image = cv2.imread(path)
         f = model.get_feature_by_image(image)
-        dist = np.sum(np.square(f-feature))
-        sim = np.dot(f, feature_t)
+        dist = float(np.sum(np.square(f-feature)))
+        sim = float(np.dot(f, feature_t))
         data.append((dist, sim, path))
 
     data = sorted(data, key=lambda x: x[0])
