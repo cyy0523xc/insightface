@@ -122,7 +122,7 @@ def cluster(path_dir, k):
     for path in sorted(list(image_files)):
         image = cv2.imread(path)
         bboxes, pointses = model.detect(image)
-        pointses = pointses.reshape((2, 5)).T
+        pointses = pointses.reshape((2, -1)).T
         if bboxes is None:
             continue
 
