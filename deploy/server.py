@@ -133,6 +133,7 @@ def cluster(path_dir, k):
         X += features
 
     # cluster
+    print('aligned image shape: ', aligned_images[0].shape)
     print('begin to cluster:')
     save_dir = 'cluster_out/'
     if not os.path.isdir(save_dir):
