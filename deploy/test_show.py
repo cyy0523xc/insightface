@@ -22,8 +22,22 @@ def detect(path):
     print(res)
 
     res = res['data']
+    show_image(path, res['bboxes'], res['points'])
+
+
+def detect_dir(path_dir):
+    url = "http://%s/detect_dir" % host
+    body = {
+        'path_dir': path_dir
+    }
+    res = requests.post(url, json=body).json()
+    for data in res['data']:
+        show_image(data['path'], data['bboxes'], data['points'])
+
+
+def show_image(path, bboxes, pointses):
     image = cv2.imread(path)
-    for [x, y, xb, yb, score], points in zip(res['bboxes'], res['points']):
+    for [x, y, xb, yb, score], points in zip(bboxes, pointses):
         x, y, xb, yb = int(x), int(y), int(xb), int(yb)
         cv2.rectangle(image, (x, y), (xb, yb), (0, 0, 255), thickness=1)
         cv2.putText(image, "%.3f" % score, (x+5, y-5),
