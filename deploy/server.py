@@ -95,14 +95,14 @@ def detect(path):
 
 def detect_dir(path_dir):
     model = get_model()
+    data = []
     image_files = list_images(path_dir)
     image_files = sorted(list(image_files))
-    data = []
     for path in image_files:
         image = cv2.imread(path)
         bboxes, points = model.detect(image)
         print('shape: ', bboxes.shape, points.shape)
-        data = data.append({
+        data.append({
             'path': path,
             'bboxes': bboxes.tolist(),
             'points': [p.reshape((2, -1)).T.tolist() for p in points],
