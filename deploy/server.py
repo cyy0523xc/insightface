@@ -3,10 +3,13 @@
 # 启动http服务
 # Author: alex
 # Created Time: 2019年03月26日 星期二 17时40分55秒
+import os
 import cv2
 import numpy as np
 import face_model
 from imutils.paths import list_images
+from sklearn.cluster import KMeans
+from sklearn.metrics import calinski_harabaz_score
 
 model_path = ''
 
@@ -68,10 +71,9 @@ def compare_one2dir(path_file, path_dir):
 
     # 获取文件夹图片的特征
     image_files = list_images(path_dir)
-    image_files = sorted(list(image_files))
     data = []
     feature_t = feature.T
-    for path in image_files:
+    for path in sorted(list(image_files)):
         image = cv2.imread(path)
         f = model.get_feature_by_image(image)
         dist = float(np.sum(np.square(f-feature)))
@@ -97,8 +99,7 @@ def detect_dir(path_dir):
     model = get_model()
     data = []
     image_files = list_images(path_dir)
-    image_files = sorted(list(image_files))
-    for path in image_files:
+    for path in sorted(list(image_files)):
         image = cv2.imread(path)
         bboxes, points = model.detect(image)
         if bboxes is not None:
@@ -113,6 +114,44 @@ def detect_dir(path_dir):
     return data
 
 
+def cluster(path_dir, k):
+    model = get_model()
+    image_files = list_images(path_dir)
+    X, aligned_images = [], []
+    print('begin to detect images:')
+    for path in sorted(list(image_files)):
+        image = cv2.imread(path)
+        bboxes, pointses = model.detect(image)
+        if bboxes is None:
+            continue
+
+        aligneds = [model.get_aligned(image, bbox, points)
+                    for bbox, points in zip(bboxes, pointses)
+                    if abs(1-bbox[4]) < 0.0005]
+        features = [model.get_feature(a) for a in aligneds]
+        aligned_images += aligneds
+        X += features
+
+    # cluster
+    print('begin to cluster:')
+    save_dir = 'cluster_out/'
+    if not os.path.isdir(save_dir):
+        os.mkdir(save_dir)
+
+    y_pred = KMeans(n_clusters=k, random_state=9).fit_predict(X)
+    for i, img, y in zip(range(len(y_pred)), aligned_images, y_pred):
+        path = save_dir + ("class_%d/" % y)
+        if not os.path.isdir(path):
+            os.mkdir(path)
+
+        cv2.imwrite(path+'%d.jpg' % i, img)
+
+    score = calinski_harabaz_score(X, y_pred)
+    return {
+        'score': score
+    }
+
+
 if __name__ == '__main__':
     import sys
     from fireRest import API, app
@@ -120,5 +159,6 @@ if __name__ == '__main__':
     API(detect)
     API(detect_dir)
     API(compare)
+    API(cluster)
     API(compare_one2dir)
     app.run(port=20920, host='0.0.0.0', debug=True)
