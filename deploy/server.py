@@ -145,6 +145,7 @@ def cluster(path_dir, k):
         if not os.path.isdir(path):
             os.mkdir(path)
 
+        img = np.transpose(img, (1, 2, 0))
         cv2.imwrite(path+'%d.jpg' % i, img)
 
     score = calinski_harabaz_score(X, y_pred)
