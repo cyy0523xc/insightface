@@ -13,5 +13,5 @@ docker run --rm -ti --runtime=nvidia --name insightface \
     -v /var/www/face_models:/models \
     -v /var/www/tmp/faces:/var/www/tmp/faces \
     -v /var/www/github.com/insightface:/faces \
-    -w faces \
+    -w /faces \
     "$1" /bin/bash
