@@ -157,7 +157,6 @@ def cluster(path_dir, algo='kmeans', k=2, score=0.999):
     }
 
 
-
 if __name__ == '__main__':
     from fireRest import API, app
     API(detect)
