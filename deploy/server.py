@@ -113,7 +113,7 @@ def detect_dir(path_dir):
     return data
 
 
-def cluster(path_dir, k):
+def cluster(path_dir, k, score=0.999):
     model = get_model()
     image_files = list_images(path_dir)
     X, aligned_images = [], []
@@ -126,7 +126,7 @@ def cluster(path_dir, k):
 
         aligneds = [model.get_aligned(image, bbox, points.reshape((2, -1)).T)
                     for bbox, points in zip(bboxes, pointses)
-                    if abs(1-bbox[4]) < 0.0005]
+                    if bbox[4] > 0.999]
         features = [model.get_feature(a) for a in aligneds]
         aligned_images += aligneds
         X += features
