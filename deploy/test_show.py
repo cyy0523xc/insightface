@@ -34,6 +34,7 @@ class face:
         body = {
             'path_dir': path_dir
         }
+        print(body)
         res = requests.post(url, json=body).json()
         for data in res['data']:
             if data['bboxes']:
@@ -46,6 +47,8 @@ class face:
 def show_image(path, bboxes, pointses):
     image = cv2.imread(path)
     for [x, y, xb, yb, score], points in zip(bboxes, pointses):
+        if score < 0.999:
+            continue
         x, y, xb, yb = int(x), int(y), int(xb), int(yb)
         cv2.rectangle(image, (x, y), (xb, yb), (0, 0, 255), thickness=1)
         cv2.putText(image, "%.3f" % score, (x+5, y-5),

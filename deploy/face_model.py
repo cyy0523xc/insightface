@@ -57,11 +57,13 @@ class FaceModel:
         if args.det == 0:
             detector = MtcnnDetector(model_folder=mtcnn_path, ctx=ctx,
                                      num_worker=args.num_worker,
+                                     minsize=self.det_minsize,
                                      accurate_landmark=True,
                                      threshold=self.det_threshold)
         else:
             detector = MtcnnDetector(model_folder=mtcnn_path, ctx=ctx,
                                      num_worker=args.num_worker,
+                                     minsize=self.det_minsize,
                                      accurate_landmark=True,
                                      threshold=[0.0, 0.0, 0.2])
 
