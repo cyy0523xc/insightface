@@ -93,9 +93,11 @@ def detect(path):
 
 
 def detect_dir(path_dir):
+    print(path_dir)
     model = get_model()
     data = []
     image_files = list_images(path_dir)
+    print("images files: %d" % len(image_files))
     for path in sorted(list(image_files)):
         image = cv2.imread(path)
         bboxes, points = model.detect(image)
