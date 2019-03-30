@@ -158,6 +158,7 @@ def cluster(path_dir, algo='kmeans', k=2, face_score=0.9995, eps=0.9):
         img = np.transpose(img, (1, 2, 0))
         cv2.imwrite(path+'%d.jpg' % i, img)
 
+    X = np.array(X)
     score = calinski_harabaz_score(X[y_pred>=0], y_pred[y_pred>=0])
     return {
         'score': score

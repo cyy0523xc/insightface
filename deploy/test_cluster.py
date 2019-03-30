@@ -7,7 +7,7 @@ import os
 import requests
 
 host = '192.168.80.241:20920'
-url = "http://%s/cluster_dir"
+url = "http://%s/cluster" % host
 
 
 def send_path_dir(path_dir):
