@@ -10,7 +10,7 @@ python3 test.py --model /models/gamodel-r50/model,0 \
 """
 docker run --rm -ti --runtime=nvidia --name insightface \
     -p 20920:20920 \
-    -v /var/www/insightface/models:/models \
+    -v /var/www/face_models:/models \
     -v /var/www/tmp/faces:/var/www/tmp/faces \
     -v /var/www/github.com/insightface:/faces \
     -w faces \
