@@ -134,7 +134,7 @@ def cluster(path_dir, algo='kmeans', k=2, face_score=0.9995, eps=0.9):
     # cluster
     print('aligned image shape: ', aligned_images[0].shape)
     print('begin to cluster:')
-    save_dir = 'cluster_out_score_%f_eps_%f/' % (face_score, 0.9)
+    save_dir = 'cluster_out_k%d_score_%f_eps_%f/' % (k, face_score, 0.9)
     if not os.path.isdir(save_dir):
         os.mkdir(save_dir)
 
