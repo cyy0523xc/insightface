@@ -113,7 +113,7 @@ def detect_dir(path_dir):
     return data
 
 
-def cluster(path_dir, algo='kmeans', k=2, score=0.999):
+def cluster(path_dir, algo='kmeans', k=2, face_score=0.9995, eps=0.9):
     model = get_model()
     image_files = list_images(path_dir)
     X, aligned_images = [], []
@@ -126,7 +126,7 @@ def cluster(path_dir, algo='kmeans', k=2, score=0.999):
 
         aligneds = [model.get_aligned(image, bbox, points.reshape((2, -1)).T)
                     for bbox, points in zip(bboxes, pointses)
-                    if bbox[4] > 0.999]
+                    if bbox[4] > face_score]
         features = [model.get_feature(a) for a in aligneds]
         aligned_images += aligneds
         X += features
@@ -134,14 +134,21 @@ def cluster(path_dir, algo='kmeans', k=2, score=0.999):
     # cluster
     print('aligned image shape: ', aligned_images[0].shape)
     print('begin to cluster:')
-    save_dir = 'cluster_out/'
+    save_dir = 'cluster_out_score_%f_eps_%f/' % (face_score, 0.9)
+    if not os.path.isdir(save_dir):
+        os.mkdir(save_dir)
+
+    if path_dir.endswith('/'):
+        path_dir = path_dir[:-1]
+
+    save_dir += path_dir.split('/')[-1]+'/'
     if not os.path.isdir(save_dir):
         os.mkdir(save_dir)
 
     if algo == 'kmeans':
-        y_pred = KMeans(n_clusters=k, random_state=9).fit_predict(X)
+        y_pred = KMeans(n_clusters=k).fit_predict(X)
     elif algo == 'dbscan':
-        y_pred = DBSCAN(metric="euclidean").fit_predict(X)
+        y_pred = DBSCAN(metric="euclidean", eps=eps).fit_predict(X)
 
     for i, img, y in zip(range(len(y_pred)), aligned_images, y_pred):
         path = save_dir + ("class_%d/" % y)
@@ -151,7 +158,7 @@ def cluster(path_dir, algo='kmeans', k=2, score=0.999):
         img = np.transpose(img, (1, 2, 0))
         cv2.imwrite(path+'%d.jpg' % i, img)
 
-    score = calinski_harabaz_score(X, y_pred)
+    score = calinski_harabaz_score(X[y_pred>=0], y_pred[y_pred>=0])
     return {
         'score': score
     }
