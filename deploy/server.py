@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import face_model
 from imutils.paths import list_images
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, DBSCAN
 from sklearn.metrics import calinski_harabaz_score
 
 
@@ -113,7 +113,7 @@ def detect_dir(path_dir):
     return data
 
 
-def cluster(path_dir, k, score=0.999):
+def cluster(path_dir, algo='kmeans', k=2, score=0.999):
     model = get_model()
     image_files = list_images(path_dir)
     X, aligned_images = [], []
@@ -138,7 +138,11 @@ def cluster(path_dir, k, score=0.999):
     if not os.path.isdir(save_dir):
         os.mkdir(save_dir)
 
-    y_pred = KMeans(n_clusters=k, random_state=9).fit_predict(X)
+    if algo == 'kmeans':
+        y_pred = KMeans(n_clusters=k, random_state=9).fit_predict(X)
+    elif algo == 'dbscan':
+        y_pred = DBSCAN(metric="euclidean").fit_predict(X)
+
     for i, img, y in zip(range(len(y_pred)), aligned_images, y_pred):
         path = save_dir + ("class_%d/" % y)
         if not os.path.isdir(path):
@@ -151,6 +155,7 @@ def cluster(path_dir, k, score=0.999):
     return {
         'score': score
     }
+
 
 
 if __name__ == '__main__':
