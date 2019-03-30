@@ -11,8 +11,6 @@ from imutils.paths import list_images
 from sklearn.cluster import KMeans
 from sklearn.metrics import calinski_harabaz_score
 
-model_path = ''
-
 
 class Config:
     """模型配置参数"""
@@ -33,7 +31,6 @@ def get_model():
     #   Unimplemented device 0
     # https://github.com/deepinsight/insightface/issues/415
     config = Config()
-    config.model = '/models/%s/model,0' % model_path
     return face_model.FaceModel(config)
 
 
@@ -155,9 +152,7 @@ def cluster(path_dir, k):
 
 
 if __name__ == '__main__':
-    import sys
     from fireRest import API, app
-    model_path = sys.argv[1]
     API(detect)
     API(detect_dir)
     API(compare)
