@@ -171,7 +171,19 @@ def cluster(path_dir, algo='kmeans', k=2, face_score=0.9995, eps=0.9):
         'count': int(count),
         'count_x': count_x,
         'dist': dist,
+        'in_dist': [in_dist(X[y_pred==i]) for i in range(count)]
     }
+
+
+def in_dist(group):
+    dist = []
+    l = len(group)
+    for i in range(l-1):
+        for j in range(i+1, l):
+            d = np.sum(np.square(group[i] - group[j]))
+            dist.append(d)
+
+    return float(min(dist)), float(np.average(dist)), float(max(dist))
 
 
 def cal_set_dist(count, X, y):
