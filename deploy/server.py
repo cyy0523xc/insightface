@@ -180,17 +180,21 @@ def cal_set_dist(count, X, y):
     data = {}
     for i in range(count):
         for j in range(i+1, count):
-            key = "%d-%d" % (i, j)
-            data[key] = dist_2set(groups[i], groups[j])
+            key = "%d-%d-min" % (i, j)
+            data[key] = dist_2set(groups[i], groups[j], min)
+            key = "%d-%d-avg" % (i, j)
+            data[key] = dist_2set(groups[i], groups[j], np.average)
+            key = "%d-%d-max" % (i, j)
+            data[key] = dist_2set(groups[i], groups[j], max)
 
     return data
 
 
-def dist_2set(group1, group2):
+def dist_2set(group1, group2, func):
     dist = []
     for i in group1:
         i_g2 = [np.sum(np.square(j - i)) for j in group2]
-        dist.append(np.average(i_g2))
+        dist.append(func(i_g2))
 
     return float(min(dist)), float(np.average(dist)), float(max(dist))
 
