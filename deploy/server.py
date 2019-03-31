@@ -7,7 +7,6 @@ import os
 import cv2
 import numpy as np
 import face_model
-from copy import deepcopy
 from imutils.paths import list_images
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.metrics import calinski_harabaz_score
@@ -180,7 +179,7 @@ def cal_set_dist(count, X, y):
     groups = [X[y==i] for i in range(count)]
     data = {}
     for i in range(count):
-        for j in range(count):
+        for j in range(i+1, count):
             key = "%d-%d" % (i, j)
             data[key] = dist_2set(groups[i], groups[j])
 
