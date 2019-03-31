@@ -177,7 +177,7 @@ def cluster(path_dir, algo='kmeans', k=2, face_score=0.9995, eps=0.9):
 def cal_set_dist(count, X, y):
     """计算不同类别之间的距离"""
     groups = [X[y==i] for i in range(count)]
-    data = []
+    data = {}
     for i in range(count):
         for j in range(count):
             if i == j:
