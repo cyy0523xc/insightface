@@ -159,10 +159,42 @@ def cluster(path_dir, algo='kmeans', k=2, face_score=0.9995, eps=0.9):
         cv2.imwrite(path+'%d.jpg' % i, img)
 
     X = np.array(X)
-    score = calinski_harabaz_score(X[y_pred>=0], y_pred[y_pred>=0])
+    uniq_y = set(y_pred)
+    count = max(uniq_y) + 1
+    count_x = [len(X[y_pred==i]) for i in range(count)]
+    score, dist = 0, []
+    if count > 1:
+        score = calinski_harabaz_score(X[y_pred>=0], y_pred[y_pred>=0])
+        dist = cal_set_dist(count, X[y_pred>=0], y_pred[y_pred>=0])
     return {
-        'score': score
+        'score': score,
+        'count': count,
+        'count_x': count_x,
+        'dist': dist,
     }
+
+
+def cal_set_dist(count, X, y):
+    """计算不同类别之间的距离"""
+    groups = [X[y==i] for i in range(count)]
+    data = []
+    for i in range(count):
+        for j in range(count):
+            if i == j:
+                continue
+            key = "%d-%d" % (i, j)
+            data[key] = dist_2set(groups[i], groups[j])
+
+    return data
+
+
+def dist_2set(group1, group2):
+    dist = []
+    for i in group1:
+        i_g2 = [np.sum(np.square(j, i)) for j in group2]
+        dist.append(min(i_g2))
+
+    return min(dist), float(np.average(dist)), max(dist)
 
 
 if __name__ == '__main__':
