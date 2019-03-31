@@ -190,7 +190,7 @@ def dist_2set(group1, group2):
     dist = []
     for i in group1:
         i_g2 = [np.sum(np.square(j - i)) for j in group2]
-        dist.append(min(i_g2))
+        dist.append(np.average(i_g2))
 
     return float(min(dist)), float(np.average(dist)), float(max(dist))
 
