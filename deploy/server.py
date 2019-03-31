@@ -168,7 +168,7 @@ def cluster(path_dir, algo='kmeans', k=2, face_score=0.9995, eps=0.9):
         dist = cal_set_dist(count, X[y_pred>=0], y_pred[y_pred>=0])
     return {
         'score': score,
-        'count': count,
+        'count': int(count),
         'count_x': count_x,
         'dist': dist,
     }
