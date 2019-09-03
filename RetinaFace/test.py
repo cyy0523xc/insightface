@@ -34,8 +34,8 @@ scales = [im_scale]
 flip = False
 
 for c in range(count):
-  faces, landmarks = detector.detect(img, thresh, scales=scales, do_flip=flip)
-  print(c, faces.shape, landmarks.shape)
+    faces, landmarks = detector.detect(img, thresh, scales=scales, do_flip=flip)
+    print(c, faces.shape, landmarks.shape)
 
 if faces is not None:
   print('find', faces.shape[0], 'faces')
@@ -52,6 +52,7 @@ if faces is not None:
         color = (0,0,255)
         if l==0 or l==3:
           color = (0,255,0)
+
         cv2.circle(img, (landmark5[l][0], landmark5[l][1]), 1, color, 2)
 
   filename = './detector_test.jpg'
