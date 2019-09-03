@@ -11,16 +11,17 @@ from PIL import Image
 from retinaface import RetinaFace
 
 
-def detect_file(image_path, out_path='out.jpg', model_path='/models/R50',
-                thresh=0.8, gpuid=0):
+def detect_file(image_path, out_path='out.jpg',
+                model_path='/models/R50', thresh=0.8, gpuid=0):
     img = cv2.imread(image_path)
     print(img.shape)
-    out_img = face_detect(img, model_path=model_path)
+    faces, landmarks = face_detect(img, model_path=model_path)
+    out_img = parse_return_image(img, faces, landmarks)
     cv2.imwrite(out_path, out_img)
     return
 
 
-def detect_image(pic, model_path='/models/R50'):
+def detect_image(pic, model_path='/models/R50', return_image=False):
     tmp = pic.split(',')[0]
     pic = pic[len(tmp)+1:]
     pic = base64.b64decode(pic)
@@ -32,12 +33,23 @@ def detect_image(pic, model_path='/models/R50'):
 
     img = cv2.cvtColor(np.asarray(pic), cv2.COLOR_RGB2BGR)
     print(img.shape)
-    out_img = face_detect(img, model_path=model_path)
+    faces, landmarks = face_detect(img, model_path=model_path)
+    if return_image is False:
+        # 返回数据
+        return {
+            'faces': faces,
+            'landmarks': landmarks
+        }
+
+    # 返回图像
+    out_img = parse_return_image(img, faces, landmarks)
     out_img = Image.fromarray(cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB))
     output_buffer = io.BytesIO()
     out_img.save(output_buffer, format='WEBP')
     binary_data = output_buffer.getvalue()
-    return {'pic': str(base64.b64encode(binary_data), encoding='utf8')}
+    return {
+        'pic': str(base64.b64encode(binary_data), encoding='utf8')
+    }
 
 
 def face_detect(img, model_path='/models/R50', thresh=0.8, gpuid=0):
@@ -65,8 +77,11 @@ def face_detect(img, model_path='/models/R50', thresh=0.8, gpuid=0):
 
     if faces is None:
         raise Exception('no faces!')
-
     print('find', faces.shape[0], 'faces')
+    return faces, landmarks
+
+
+def parse_return_image(img, faces, landmarks):
     for i in range(faces.shape[0]):
         # print('score', faces[i][4])
         box = faces[i].astype(np.int)
