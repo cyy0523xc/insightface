@@ -5,7 +5,7 @@
 # Created Time: 2019年03月26日 星期二 15时13分07秒
 cmd=/bin/bash
 if [ $# -ge 2 ]; then
-    cmd="$2"
+    cmd=$*
 fi
 echo "Docker: $1"
 echo "Command: $cmd"
