@@ -10,11 +10,10 @@ from retinaface import RetinaFace
 thresh = 0.8
 count = 1
 gpuid = 0
+detector = RetinaFace('/models/R50', 0, gpuid, 'net3')
 
 
-def face_detect(image_path, out_path, model_path='/models/R50'):
-    detector = RetinaFace(model_path, 0, gpuid, 'net3')
-
+def face_detect(image_path, out_path):
     scales = [1024, 1980]
     img = cv2.imread(image_path)
     print(img.shape)
@@ -55,15 +54,13 @@ def face_detect(image_path, out_path, model_path='/models/R50'):
         landmark5 = landmarks[i].astype(np.int)
         # print(landmark.shape)
         for l in range(landmark5.shape[0]):
-            color = (0, 0, 255)
-            if l == 0 or l == 3:
-                color = (0, 255, 0)
-
+            color = (0, 255, 0) if l == 0 or l == 3 else (0, 0, 255)
             cv2.circle(img, (landmark5[l][0], landmark5[l][1]), 1, color, 2)
 
     cv2.imwrite(out_path, img)
 
 
 if __name__ == '__main__':
-    import sys
-    face_detect(sys.argv[1], sys.argv[2])
+    from fireRest import API, app
+    API(face_detect)
+    app.run(port=20920, host='0.0.0.0', debug=True)
