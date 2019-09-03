@@ -15,7 +15,7 @@ default_model_path = '/models/R50'
 
 def detect_file(image_path, out_path='out.jpg',
                 model_path=default_model_path, thresh=0.8, gpuid=0):
-    """人脸检测
+    """人脸检测（输入输出都是图片）
     :param image_path 输入图片相对路径
     :param out_path 输出图片相对地址
     :return
@@ -29,7 +29,7 @@ def detect_file(image_path, out_path='out.jpg',
 
 
 def detect_image(pic, model_path=default_model_path, return_image=False):
-    """人脸检测
+    """人脸检测（输入的是base64编码的图像）
     :param pic 图片对象使用base64编码
     :param return_image 是否返回图片对象，base64编码，默认值为false
     :return 当return_image=false时，返回值为{'faces': [], 'landmarks': []}，其中:
@@ -59,7 +59,7 @@ def detect_image(pic, model_path=default_model_path, return_image=False):
     out_img = parse_return_image(img, faces, landmarks)
     out_img = Image.fromarray(cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB))
     output_buffer = io.BytesIO()
-    out_img.save(output_buffer, format='WEBP')
+    out_img.save(output_buffer, format='JPEG')
     binary_data = output_buffer.getvalue()
     return {
         'pic': str(base64.b64encode(binary_data), encoding='utf8')
