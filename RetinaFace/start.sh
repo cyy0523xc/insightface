@@ -11,8 +11,8 @@ if [ $# -le 2 ]; then
 fi
 echo "Command: $cmd"
 
-docker rm -f insightface
-docker run --rm -d --runtime=nvidia --name insightface \
+docker rm -f ibbd-face
+docker run --rm -d --runtime=nvidia --name ibbd-face \
     -p 20920:20920 \
     -v /var/www/face_models:/models \
     -v /var/www/tmp/faces:/var/www/tmp/faces \
