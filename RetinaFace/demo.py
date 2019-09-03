@@ -15,6 +15,11 @@ default_model_path = '/models/R50'
 
 def detect_file(image_path, out_path='out.jpg',
                 model_path=default_model_path, thresh=0.8, gpuid=0):
+    """人脸检测
+    :param image_path 输入图片相对路径
+    :param out_path 输出图片相对地址
+    :return
+    """
     img = cv2.imread(image_path)
     print(img.shape)
     faces, landmarks = face_detect(img, model_path=model_path)
@@ -24,6 +29,13 @@ def detect_file(image_path, out_path='out.jpg',
 
 
 def detect_image(pic, model_path=default_model_path, return_image=False):
+    """人脸检测
+    :param pic 图片对象使用base64编码
+    :param return_image 是否返回图片对象，base64编码，默认值为false
+    :return 当return_image=false时，返回值为{'faces': [], 'landmarks': []}，其中:
+        faces是人脸边框，landmarks是人脸的5个关键点
+        当return_image=true时，返回值为{'pic': 图片对象}，pic值也是base64编码
+    """
     tmp = pic.split(',')[0]
     pic = pic[len(tmp)+1:]
     pic = base64.b64decode(pic)
