@@ -7,16 +7,19 @@ import cv2
 import numpy as np
 from retinaface import RetinaFace
 
-thresh = 0.8
-count = 1
-gpuid = 0
-detector = RetinaFace('/models/R50', 0, gpuid, 'net3')
 
-
-def face_detect(image_path, out_path):
-    scales = [1024, 1980]
+def detect_file(image_path, out_path='out.jpg', model_path='/models/R50',
+                thresh=0.8, gpuid=0):
     img = cv2.imread(image_path)
     print(img.shape)
+    out_img = face_detect(img, model_path=model_path)
+    cv2.imwrite(out_path, out_img)
+    return
+
+
+def face_detect(img, model_path='/models/R50', thresh=0.8, gpuid=0):
+    detector = RetinaFace(model_path, 0, gpuid, 'net3')
+    scales = [1024, 1980]
     im_shape = img.shape
     target_size = scales[0]
     max_size = scales[1]
@@ -33,14 +36,12 @@ def face_detect(image_path, out_path):
 
     scales = [im_scale]
     flip = False
-
-    for c in range(count):
-        faces, landmarks = detector.detect(img, thresh,
-                                           scales=scales, do_flip=flip)
-        print(c, faces.shape, landmarks.shape)
+    faces, landmarks = detector.detect(img, thresh,
+                                       scales=scales, do_flip=flip)
+    print(faces.shape, landmarks.shape)
 
     if faces is None:
-        return
+        raise Exception('no faces!')
 
     print('find', faces.shape[0], 'faces')
     for i in range(faces.shape[0]):
@@ -57,10 +58,12 @@ def face_detect(image_path, out_path):
             color = (0, 255, 0) if l == 0 or l == 3 else (0, 0, 255)
             cv2.circle(img, (landmark5[l][0], landmark5[l][1]), 1, color, 2)
 
-    cv2.imwrite(out_path, img)
+    return img
 
 
 if __name__ == '__main__':
     from fireRest import API, app
-    API(face_detect)
+    # curl -XPOST localhost:20920/detect_file
+    #     -d '{"image_path": "../tests/celian01.jpeg", "out_path": "out.jpg"}'
+    API(detect_file)
     app.run(port=20920, host='0.0.0.0', debug=True)
