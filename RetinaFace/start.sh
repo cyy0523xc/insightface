@@ -7,6 +7,8 @@ cmd=/bin/bash
 if [ $# -ge 2 ]; then
     cmd="$2"
 fi
+echo "Docker: $1"
+echo "Command: $cmd"
 
 docker run --rm -ti --runtime=nvidia --name insightface \
     -p 20920:20920 \
