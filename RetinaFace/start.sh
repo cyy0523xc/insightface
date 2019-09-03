@@ -17,4 +17,4 @@ docker run --rm -ti --runtime=nvidia --name insightface \
     -e MXNET_CUDNN_AUTOTUNE_DEFAULT=0 \
     -e PYTHONIOENCODING=utf-8 \
     -w /faces \
-    "$cmd"
+    $cmd
