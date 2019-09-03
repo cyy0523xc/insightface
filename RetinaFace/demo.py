@@ -66,4 +66,4 @@ if __name__ == '__main__':
     # curl -XPOST localhost:20920/detect_file
     #     -d '{"image_path": "../tests/celian01.jpeg", "out_path": "out.jpg"}'
     API(detect_file)
-    app.run(port=20920, host='0.0.0.0', debug=True)
+    app.run(port=20920, host='0.0.0.0')
