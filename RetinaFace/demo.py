@@ -10,9 +10,11 @@ import numpy as np
 from PIL import Image
 from retinaface import RetinaFace
 
+default_model_path = '/models/R50'
+
 
 def detect_file(image_path, out_path='out.jpg',
-                model_path='/models/R50', thresh=0.8, gpuid=0):
+                model_path=default_model_path, thresh=0.8, gpuid=0):
     img = cv2.imread(image_path)
     print(img.shape)
     faces, landmarks = face_detect(img, model_path=model_path)
@@ -21,7 +23,7 @@ def detect_file(image_path, out_path='out.jpg',
     return
 
 
-def detect_image(pic, model_path='/models/R50', return_image=False):
+def detect_image(pic, model_path=default_model_path, return_image=False):
     tmp = pic.split(',')[0]
     pic = pic[len(tmp)+1:]
     pic = base64.b64decode(pic)
@@ -52,7 +54,7 @@ def detect_image(pic, model_path='/models/R50', return_image=False):
     }
 
 
-def face_detect(img, model_path='/models/R50', thresh=0.8, gpuid=0):
+def face_detect(img, model_path=default_model_path, thresh=0.8, gpuid=0):
     detector = RetinaFace(model_path, 0, gpuid, 'net3')
     scales = [1024, 1980]
     im_shape = img.shape
