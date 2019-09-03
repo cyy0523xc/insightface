@@ -3,8 +3,11 @@
 #
 # Author: alex
 # Created Time: 2019年09月03日 星期二 14时11分56秒
+import io
 import cv2
+import base64
 import numpy as np
+from PIL import Image
 from retinaface import RetinaFace
 
 
@@ -15,6 +18,26 @@ def detect_file(image_path, out_path='out.jpg', model_path='/models/R50',
     out_img = face_detect(img, model_path=model_path)
     cv2.imwrite(out_path, out_img)
     return
+
+
+def detect_image(pic, model_path='/models/R50'):
+    tmp = pic.split(',')[0]
+    pic = pic[len(tmp)+1:]
+    pic = base64.b64decode(pic)
+    pic = Image.open(io.BytesIO(pic))
+    if 'png' in tmp:   # 先转化为jpg
+        bg = Image.new("RGB", pic.size, (255, 255, 255))
+        bg.paste(pic, pic)
+        pic = bg
+
+    img = cv2.cvtColor(np.asarray(pic), cv2.COLOR_RGB2BGR)
+    print(img.shape)
+    out_img = face_detect(img, model_path=model_path)
+    out_img = Image.fromarray(cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB))
+    output_buffer = io.BytesIO()
+    out_img.save(output_buffer, format='WEBP')
+    binary_data = output_buffer.getvalue()
+    return {'pic': str(base64.b64encode(binary_data), encoding='utf8')}
 
 
 def face_detect(img, model_path='/models/R50', thresh=0.8, gpuid=0):
