@@ -119,4 +119,4 @@ if __name__ == '__main__':
     #     -d '{"image_path": "../tests/celian01.jpeg", "out_path": "out.jpg"}'
     API(detect_file)
     API(detect_image)
-    app.run(port=20920, host='0.0.0.0')
+    app.run(port=20920, host='0.0.0.0', debug=True)
