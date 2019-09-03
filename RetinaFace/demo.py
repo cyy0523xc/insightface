@@ -51,8 +51,8 @@ def detect_image(pic, model_path=default_model_path, return_image=False):
     if return_image is False:
         # 返回数据
         return {
-            'faces': faces,
-            'landmarks': landmarks
+            'faces': faces.tolist(),
+            'landmarks': landmarks.tolist()
         }
 
     # 返回图像
