@@ -4,7 +4,7 @@
 # Author: alex
 # Created Time: 2019年03月26日 星期二 15时13分07秒
 cmd=/bin/bash
-if [ $# -gt 2 ]; then
+if [ $# -ge 2 ]; then
     cmd="$2"
 fi
 
