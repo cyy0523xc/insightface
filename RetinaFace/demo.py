@@ -3,6 +3,7 @@
 #
 # Author: alex
 # Created Time: 2019年09月03日 星期二 14时11分56秒
+import re
 import io
 import cv2
 import base64
@@ -28,10 +29,11 @@ def detect_file(image_path, out_path='out.jpg',
     return
 
 
-def detect_image(pic, model_path=default_model_path, return_data=True,
-                 return_image=False):
+def detect_image(pic, image_type='jpg', model_path=default_model_path,
+                 return_data=True, return_image=False):
     """人脸检测（输入的是base64编码的图像）
     :param pic 图片对象使用base64编码
+    :param image_type 输入图像类型, 取值jpg或者png
     :param return_data 是否返回数据，默认为True。
         若该值为True，则返回值里会包含faces与landmarks
         faces是人脸边框，landmarks是人脸的5个关键点
@@ -39,11 +41,10 @@ def detect_image(pic, model_path=default_model_path, return_data=True,
         当return_image=true时，返回值为{'pic': 图片对象}，pic值也是base64编码
     :return {'faces': [], 'landmarks': [], 'pic': str}
     """
-    tmp = pic.split(',')[0]
-    pic = pic[len(tmp)+1:]
+    pic = re.sub('^data:image/.+;base64,', '', pic)
     pic = base64.b64decode(pic)
     pic = Image.open(io.BytesIO(pic))
-    if 'png' in tmp:   # 先转化为jpg
+    if image_type == 'png':   # 先转化为jpg
         bg = Image.new("RGB", pic.size, (255, 255, 255))
         bg.paste(pic, pic)
         pic = bg
