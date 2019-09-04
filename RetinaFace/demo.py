@@ -15,7 +15,7 @@ default_model_path = '/models/R50'
 
 def detect_file(image_path, out_path='out.jpg',
                 model_path=default_model_path, thresh=0.8, gpuid=0):
-    """人脸检测（输入输出都是图片）
+    """人脸检测（输入输出都是图片路径）
     :param image_path 输入图片相对路径
     :param out_path 输出图片相对地址
     :return
