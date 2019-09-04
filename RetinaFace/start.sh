@@ -11,14 +11,12 @@ if [ $# -le 2 ]; then
 fi
 echo "Command: $cmd"
 
-tests=`pwd`
-tests=${tests%/*}/tests
 docker rm -f ibbd-face
 docker run --rm -d --runtime=nvidia --name ibbd-face \
     -p 20920:20920 \
-    -v /var/www/face_models:/models \
-    -v "$tests":/faces/tests \
     -v `pwd`:/faces \
+    -v `pwd`/../tests:/faces/tests \
+    -v /var/www/face_models:/models \
     -e MXNET_CUDNN_AUTOTUNE_DEFAULT=0 \
     -e PYTHONIOENCODING=utf-8 \
     -w /faces \
