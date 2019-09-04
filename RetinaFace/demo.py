@@ -28,13 +28,16 @@ def detect_file(image_path, out_path='out.jpg',
     return
 
 
-def detect_image(pic, model_path=default_model_path, return_image=False):
+def detect_image(pic, model_path=default_model_path, return_data=True,
+                 return_image=False):
     """人脸检测（输入的是base64编码的图像）
     :param pic 图片对象使用base64编码
-    :param return_image 是否返回图片对象，base64编码，默认值为false
-    :return 当return_image=false时，返回值为{'faces': [], 'landmarks': []}，其中:
+    :param return_data 是否返回数据，默认为True。
+        若该值为True，则返回值里会包含faces与landmarks
         faces是人脸边框，landmarks是人脸的5个关键点
+    :param return_image 是否返回图片对象，base64编码，默认值为false
         当return_image=true时，返回值为{'pic': 图片对象}，pic值也是base64编码
+    :return {'faces': [], 'landmarks': [], 'pic': str}
     """
     tmp = pic.split(',')[0]
     pic = pic[len(tmp)+1:]
@@ -48,22 +51,22 @@ def detect_image(pic, model_path=default_model_path, return_image=False):
     img = cv2.cvtColor(np.asarray(pic), cv2.COLOR_RGB2BGR)
     print(img.shape)
     faces, landmarks = face_detect(img, model_path=model_path)
-    if return_image is False:
+    data = {}
+    if return_data:
         # 返回数据
-        return {
-            'faces': faces.tolist(),
-            'landmarks': landmarks.tolist()
-        }
+        data['faces'] = faces.tolist(),
+        data['landmarks'] = landmarks.tolist()
 
-    # 返回图像
-    out_img = parse_return_image(img, faces, landmarks)
-    out_img = Image.fromarray(cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB))
-    output_buffer = io.BytesIO()
-    out_img.save(output_buffer, format='JPEG')
-    binary_data = output_buffer.getvalue()
-    return {
-        'pic': str(base64.b64encode(binary_data), encoding='utf8')
-    }
+    if return_image:
+        # 返回图像
+        out_img = parse_return_image(img, faces, landmarks)
+        out_img = Image.fromarray(cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB))
+        output_buffer = io.BytesIO()
+        out_img.save(output_buffer, format='JPEG')
+        binary_data = output_buffer.getvalue()
+        data['pic'] = str(base64.b64encode(binary_data), encoding='utf8')
+
+    return data
 
 
 def face_detect(img, model_path=default_model_path, thresh=0.8, gpuid=0):
