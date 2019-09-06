@@ -29,10 +29,12 @@ def detect_file(image_path, out_path='out.jpg',
     return
 
 
-def detect_image(pic, image_type='jpg', model_path=default_model_path,
+def detect_image(pic='', pic_path='', image_type='jpg',
+                 model_path=default_model_path,
                  return_data=True, return_image=False):
     """人脸检测（输入的是base64编码的图像）
     :param pic 图片对象使用base64编码
+    :param pic_path 图片路径
     :param image_type 输入图像类型, 取值jpg或者png
     :param return_data 是否返回数据，默认为True。
         若该值为True，则返回值里会包含faces与landmarks
@@ -41,15 +43,28 @@ def detect_image(pic, image_type='jpg', model_path=default_model_path,
         当return_image=true时，返回值为{'pic': 图片对象}，pic值也是base64编码
     :return {'faces': [], 'landmarks': [], 'pic': str}
     """
-    pic = re.sub('^data:image/.+;base64,', '', pic)
-    pic = base64.b64decode(pic)
-    pic = Image.open(io.BytesIO(pic))
-    if image_type == 'png':   # 先转化为jpg
-        bg = Image.new("RGB", pic.size, (255, 255, 255))
-        bg.paste(pic, pic)
-        pic = bg
+    if not pic and not pic_path:
+        raise Exception('pic参数和pic_path参数必须有一个不为空')
 
-    img = cv2.cvtColor(np.asarray(pic), cv2.COLOR_RGB2BGR)
+    if pic:
+        # 自动判断类型
+        type_str = re.findall('^data:image/.+;base64,', pic)
+        if len(type_str) > 0:
+            if 'png' in type_str[0]:
+                image_type = 'png'
+
+        pic = re.sub('^data:image/.+;base64,', '', pic)
+        pic = base64.b64decode(pic)
+        pic = Image.open(io.BytesIO(pic))
+        if image_type == 'png':   # 先转化为jpg
+            bg = Image.new("RGB", pic.size, (255, 255, 255))
+            bg.paste(pic, pic)
+            pic = bg
+
+        img = cv2.cvtColor(np.asarray(pic), cv2.COLOR_RGB2BGR)
+    else:
+        img = cv2.imread(pic_path)
+
     print(img.shape)
     faces, landmarks = face_detect(img, model_path=model_path)
     data = {}
