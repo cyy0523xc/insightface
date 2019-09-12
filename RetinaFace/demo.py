@@ -22,50 +22,48 @@ def detect_file(image_path, out_path='out.jpg',
     :return
     """
     img = cv2.imread(image_path)
-    print(img.shape)
     faces, landmarks = face_detect(img, model_path=model_path)
     out_img = parse_return_image(img, faces, landmarks)
     cv2.imwrite(out_path, out_img)
     return
 
 
-def detect_image(pic='', pic_path='', image_type='jpg',
+def detect_image(image='', image_path='', image_type='jpg',
                  model_path=default_model_path,
                  return_data=True, return_image=False):
     """人脸检测（输入的是base64编码的图像）
-    :param pic 图片对象使用base64编码
-    :param pic_path 图片路径
+    :param image 图片对象使用base64编码
+    :param image_path 图片路径
     :param image_type 输入图像类型, 取值jpg或者png
     :param return_data 是否返回数据，默认为True。
         若该值为True，则返回值里会包含faces与landmarks
         faces是人脸边框，landmarks是人脸的5个关键点
     :param return_image 是否返回图片对象，base64编码，默认值为false
-        当return_image=true时，返回值为{'pic': 图片对象}，pic值也是base64编码
-    :return {'faces': [], 'landmarks': [], 'pic': str}
+        当return_image=true时，返回值为{'image': 图片对象}，image值也是base64编码
+    :return {'faces': [], 'landmarks': [], 'image': str}
     """
-    if not pic and not pic_path:
-        raise Exception('pic参数和pic_path参数必须有一个不为空')
+    if not image and not image_path:
+        raise Exception('image参数和image_path参数必须有一个不为空')
 
-    if pic:
+    if image:
         # 自动判断类型
-        type_str = re.findall('^data:image/.+;base64,', pic)
+        type_str = re.findall('^data:image/.+;base64,', image)
         if len(type_str) > 0:
             if 'png' in type_str[0]:
                 image_type = 'png'
 
-        pic = re.sub('^data:image/.+;base64,', '', pic)
-        pic = base64.b64decode(pic)
-        pic = Image.open(io.BytesIO(pic))
+        image = re.sub('^data:image/.+;base64,', '', image)
+        image = base64.b64decode(image)
+        image = Image.open(io.BytesIO(image))
         if image_type == 'png':   # 先转化为jpg
-            bg = Image.new("RGB", pic.size, (255, 255, 255))
-            bg.paste(pic, pic)
-            pic = bg
+            bg = Image.new("RGB", image.size, (255, 255, 255))
+            bg.paste(image, image)
+            image = bg
 
-        img = cv2.cvtColor(np.asarray(pic), cv2.COLOR_RGB2BGR)
+        img = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
     else:
-        img = cv2.imread(pic_path)
+        img = cv2.imread(image_path)
 
-    print(img.shape)
     faces, landmarks = face_detect(img, model_path=model_path)
     data = {}
     if return_data:
@@ -73,6 +71,7 @@ def detect_image(pic='', pic_path='', image_type='jpg',
         data['faces'] = faces.tolist(),
         data['landmarks'] = landmarks.tolist()
 
+    out_img = None
     if return_image:
         # 返回图像
         out_img = parse_return_image(img, faces, landmarks)
@@ -80,9 +79,12 @@ def detect_image(pic='', pic_path='', image_type='jpg',
         output_buffer = io.BytesIO()
         out_img.save(output_buffer, format='JPEG')
         binary_data = output_buffer.getvalue()
-        data['pic'] = str(base64.b64encode(binary_data), encoding='utf8')
+        out_img = str(base64.b64encode(binary_data), encoding='utf8')
 
-    return data
+    return {
+        'image': out_img,
+        'data': data
+    }
 
 
 def face_detect(img, model_path=default_model_path, thresh=0.8, gpuid=0):
