@@ -4,10 +4,10 @@
 # Author: alex
 # Created Time: 2019年09月03日 星期二 14时11分56秒
 import re
-import io
 import cv2
 import base64
 import numpy as np
+from io import BytesIO
 from PIL import Image
 from retinaface import RetinaFace
 
@@ -54,7 +54,7 @@ def detect_image(image='', image_path='', image_type='jpg',
 
         image = re.sub('^data:image/.+;base64,', '', image)
         image = base64.b64decode(image)
-        image = Image.open(io.BytesIO(image))
+        image = Image.open(BytesIO(image))
         if image_type == 'png':   # 先转化为jpg
             bg = Image.new("RGB", image.size, (255, 255, 255))
             bg.paste(image, image)
@@ -76,10 +76,7 @@ def detect_image(image='', image_path='', image_type='jpg',
         # 返回图像
         out_img = parse_return_image(img, faces, landmarks)
         out_img = Image.fromarray(cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB))
-        output_buffer = io.BytesIO()
-        out_img.save(output_buffer, format='JPEG')
-        binary_data = output_buffer.getvalue()
-        out_img = str(base64.b64encode(binary_data), encoding='utf8')
+        out_img = parse_output_image(out_img)
 
     return {
         'image': out_img,
@@ -134,10 +131,27 @@ def parse_return_image(img, faces, landmarks):
     return img
 
 
+def parse_output_image(out_img):
+    """base64字符串"""
+    output_buffer = BytesIO()
+    out_img.save(output_buffer, format='JPEG')
+    binary_data = output_buffer.getvalue()
+    return str(base64.b64encode(binary_data), encoding='utf8')
+
+
+def get_demo_image(path):
+    """获取演示图片"""
+    img = Image.open(path)
+    return {
+        'image': parse_output_image(img)
+    }
+
+
 if __name__ == '__main__':
     from fireRest import API, app
     # curl -XPOST localhost:20920/detect_file
     #     -d '{"image_path": "../tests/celian01.jpeg", "out_path": "out.jpg"}'
     API(detect_file)
     API(detect_image)
+    API(get_demo_image)
     app.run(port=20920, host='0.0.0.0', debug=True)
