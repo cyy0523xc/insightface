@@ -14,6 +14,10 @@ from retinaface import RetinaFace
 default_model_path = '/models/R50'
 
 
+def get_detector(model_path=default_model_path, gpuid=0):
+    return RetinaFace(model_path, 0, gpuid, 'net3')
+
+
 def detect_file(image_path, out_path='out.jpg',
                 model_path=default_model_path, thresh=0.8, gpuid=0):
     """人脸检测（输入输出都是图片路径）
@@ -22,7 +26,8 @@ def detect_file(image_path, out_path='out.jpg',
     :return
     """
     img = cv2.imread(image_path)
-    faces, landmarks = face_detect(img, model_path=model_path)
+    detector = get_detector(model_path=model_path)
+    faces, landmarks = face_detect(detector, img)
     out_img = parse_return_image(img, faces, landmarks)
     cv2.imwrite(out_path, out_img)
     return
@@ -64,7 +69,8 @@ def detect_image(image='', image_path='', image_type='jpg',
     else:
         img = cv2.imread(image_path)
 
-    faces, landmarks = face_detect(img, model_path=model_path)
+    detector = get_detector(model_path=model_path)
+    faces, landmarks = face_detect(detector, img)
     data = {}
     if return_data:
         # 返回数据
@@ -84,8 +90,7 @@ def detect_image(image='', image_path='', image_type='jpg',
     }
 
 
-def face_detect(img, model_path=default_model_path, thresh=0.8, gpuid=0):
-    detector = RetinaFace(model_path, 0, gpuid, 'net3')
+def face_detect(detector, img, thresh=0.8):
     scales = [1024, 1980]
     im_shape = img.shape
     target_size = scales[0]
