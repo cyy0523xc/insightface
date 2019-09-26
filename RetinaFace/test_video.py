@@ -29,6 +29,12 @@ def parse_video(video_path, output_path, rate=1):
             continue
         fn = video_path.split('/')[-1]
         fn = fn.split('.')[0]
+        path = os.path.join(output_path, fn, 'images')
+        if not os.path.exists(path):
+            os.makedirs(path)
+        path = os.path.join(output_path, fn, 'data')
+        if not os.path.exists(path):
+            os.makedirs(path)
         for i, (face, lm) in enumerate(zip(faces, landmarks)):
             # 保存头像文件
             img_fn = "%s-%03d-%d.jpg" % (fn, index, i)
@@ -38,7 +44,7 @@ def parse_video(video_path, output_path, rate=1):
             cv2.imwrite(path, img)
             # 保存对应数据文件
             json_fn = "%s-%03d-%d.json" % (fn, index, i)
-            path = os.path.join(output_path, fn, 'images', json_fn)
+            path = os.path.join(output_path, fn, 'data', json_fn)
             with open(path, 'w') as w:
                 json.dump({
                     'face': face,
