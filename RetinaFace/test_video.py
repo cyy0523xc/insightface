@@ -9,7 +9,7 @@ import json
 from demo import get_detector, face_detect
 
 
-def parse_video(video_path, output_path, rate=1):
+def parse_video(video_path, output_path, rate=2):
     vc = cv2.VideoCapture(video_path)
     if vc.isOpened() is False:
         raise Exception('video open false!')
@@ -42,13 +42,13 @@ def parse_video(video_path, output_path, rate=1):
             os.makedirs(path)
         for i, (face, lm) in enumerate(zip(faces, landmarks)):
             # 保存头像文件
-            img_fn = "%s-%03d-%d.jpg" % (fn, index, i)
+            img_fn = "%s-%05d-%d.jpg" % (fn, index, i)
             path = os.path.join(output_path, fn, 'images', img_fn)
             x, y, xb, yb, _ = face
             img = frame[int(y):int(yb), int(x):int(xb)]
             cv2.imwrite(path, img)
             # 保存对应数据文件
-            json_fn = "%s-%03d-%d.json" % (fn, index, i)
+            json_fn = "%s-%05d-%d.json" % (fn, index, i)
             path = os.path.join(output_path, fn, 'data', json_fn)
             with open(path, 'w') as w:
                 json.dump({
