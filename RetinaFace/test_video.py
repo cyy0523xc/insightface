@@ -34,7 +34,7 @@ def parse_video(video_path, output_path, rate=1):
             img_fn = "%s-%03d-%d.jpg" % (fn, index, i)
             path = os.path.join(output_path, fn, 'images', img_fn)
             x, y, xb, yb, _ = face
-            img = frame[y:yb, x:xb]
+            img = frame[int(y):int(yb), int(x):int(xb)]
             cv2.imwrite(path, img)
             # 保存对应数据文件
             json_fn = "%s-%03d-%d.json" % (fn, index, i)
