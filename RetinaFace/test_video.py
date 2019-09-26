@@ -16,18 +16,19 @@ def parse_video(video_path, output_path, rate=1):
 
     index, count = 0, 0
     mod = int(vc.get(cv2.CAP_PROP_FPS))*rate
+    print("mod: ", mod)
     detector = get_detector()
     while True:
         rval, frame = vc.read()
         if rval is False:
             break
-        if index % mod != 0:
+        index += 1
+        if index % mod != 1:
             continue
         count += 1
         if count % 10 == 0:
             print("parse count: %d" % count)
 
-        index += 1
         faces, landmarks = face_detect(detector, frame)
         if len(faces) < 1:
             continue
@@ -54,6 +55,8 @@ def parse_video(video_path, output_path, rate=1):
                     'face': face.tolist(),
                     'landmark': lm.tolist(),
                 }, w)
+
+    vc.release()
 
 
 if __name__ == '__main__':
