@@ -47,8 +47,8 @@ def parse_video(video_path, output_path, rate=1):
             path = os.path.join(output_path, fn, 'data', json_fn)
             with open(path, 'w') as w:
                 json.dump({
-                    'face': face,
-                    'landmark': lm,
+                    'face': face.tolist(),
+                    'landmark': lm.tolist(),
                 }, w)
 
 
