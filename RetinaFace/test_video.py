@@ -14,7 +14,7 @@ def parse_video(video_path, output_path, rate=1):
     if vc.isOpened() is False:
         raise Exception('video open false!')
 
-    index = 0
+    index, count = 0, 0
     mod = int(vc.get(cv2.CAP_PROP_FPS))*rate
     detector = get_detector()
     while True:
@@ -23,6 +23,10 @@ def parse_video(video_path, output_path, rate=1):
             break
         if index % mod != 0:
             continue
+        count += 1
+        if count % 10 == 0:
+            print("parse count: %d" % count)
+
         index += 1
         faces, landmarks = face_detect(detector, frame)
         if len(faces) < 1:
