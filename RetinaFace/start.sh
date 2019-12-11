@@ -13,11 +13,10 @@ echo "Command: $cmd"
 
 docker rm -f ibbd-face
 docker run --rm -d --runtime=nvidia --name ibbd-face \
-    -p 20920:20920 \
-    -v `pwd`:/faces \
-    -v `pwd`/../tests:/faces/tests \
-    -v /var/www/face_models:/models \
+    -p 20930:20920 \
     -e MXNET_CUDNN_AUTOTUNE_DEFAULT=0 \
     -e PYTHONIOENCODING=utf-8 \
+    --volumes-from ibbd-data \
+    -v `pwd`:/faces \
     -w /faces \
     $cmd
