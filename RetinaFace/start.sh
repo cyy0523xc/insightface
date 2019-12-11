@@ -1,7 +1,7 @@
 #!/bin/bash
 # 
 # 启动
-# ./start.sh registry.cn-hangzhou.aliyuncs.com/ibbd/face:mxnet-cu90-opencv-py3 \
+# ./start.sh registry.cn-hangzhou.aliyuncs.com/ibbd/face:gpu_cu101 \
 #     python3 demo.py
 # Author: alex
 # Created Time: 2019年03月26日 星期二 15时13分07秒

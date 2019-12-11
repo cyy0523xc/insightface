@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# 启动, 镜像：mxnet-cu90-opencv-py3
+# 启动, 镜像：mxnet-cu90-opencv-py3   gpu_cu101
 # Author: alex
 # Created Time: 2019年03月26日 星期二 15时13分07秒
 docker run --rm -ti --runtime=nvidia --name insightface \
