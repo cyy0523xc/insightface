@@ -11,12 +11,13 @@ if [ $# -le 2 ]; then
 fi
 echo "Command: $cmd"
 
-docker rm -f ibbd-face
-docker run --rm -d --runtime=nvidia --name ibbd-face \
+docker rm -f insightface
+docker run -d --runtime=nvidia --name insightface \
     -p 20930:20920 \
     -e MXNET_CUDNN_AUTOTUNE_DEFAULT=0 \
     -e PYTHONIOENCODING=utf-8 \
     --volumes-from ibbd-data \
+    -v /var/www/face_models:/models \
     -v `pwd`:/faces \
     -w /faces \
     $cmd
