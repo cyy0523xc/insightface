@@ -13,6 +13,10 @@ from io import BytesIO
 
 def base64_cv2(b64):
     """将base64格式的图片转换为cv2格式"""
+    b64 = base64.b64decode(b64)
+    nparr = np.fromstring(b64, np.uint8)
+    return cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
     tmp = b64.split(',')[0]
     b64 = b64[len(tmp)+1:]
     b64 = base64.b64decode(b64)
