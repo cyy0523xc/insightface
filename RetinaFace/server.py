@@ -10,6 +10,7 @@ from image import base64_cv2
 
 model_path = '/models/R50'
 g_model = None
+empty = np.array([])     # 预定义常量
 
 
 def init_model(gpuid=0):
@@ -54,7 +55,7 @@ def face_detect(img, thresh=0.8):
     faces, landmarks = g_model.detect(img, thresh,
                                       scales=scales, do_flip=flip)
     if faces is None:
-        return np.array([]), np.array([])
+        return empty, empty
 
     # print(faces.shape, landmarks.shape)
     # print('find', faces.shape[0], 'faces')
