@@ -3,6 +3,7 @@
 #
 # Author: alex
 # Created Time: 2019年12月11日 星期三 18时11分42秒
+import time
 import numpy as np
 from retinaface import RetinaFace
 from image import base64_cv2
@@ -20,6 +21,7 @@ def detect_images(b64_list, thresh=0.8):
     """人脸检测
     :return [{"bboxes": [], "landmarks": []}]
     """
+    start = time.time()
     data = []
     for img in b64_list:
         img = base64_cv2(img)
@@ -29,6 +31,7 @@ def detect_images(b64_list, thresh=0.8):
             "landmarks": landmarks.tolist(),
         })
 
+    print('===> Time: ', time.time() - start, '  Total: ', len(b64_list))
     return data
 
 
@@ -53,8 +56,8 @@ def face_detect(img, thresh=0.8):
     if faces is None:
         return np.array([]), np.array([])
 
-    print(faces.shape, landmarks.shape)
-    print('find', faces.shape[0], 'faces')
+    # print(faces.shape, landmarks.shape)
+    # print('find', faces.shape[0], 'faces')
     return faces, landmarks
 
 
